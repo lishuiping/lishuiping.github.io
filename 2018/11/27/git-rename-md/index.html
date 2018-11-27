@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="Mark blog">
 <meta property="og:description" content="今天在项目管理中遇到这么一个场景： 项目分支有： master 和 develop   master 为可发布版本，每次发布会打上Tag。  develop为开发分支，只有一个小组在develop上开发，需求正常迭代，所以基本能满足要求。 （多项目组多版本同时开发正常会在develop下拉取多个 功能分支：feature-功能1、 feature-功能2 完成后再合并到develop）   由于">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-27T11:21:29.471Z">
+<meta property="og:updated_time" content="2018-11-27T11:28:18.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git 分支重命名">
 <meta name="twitter:description" content="今天在项目管理中遇到这么一个场景： 项目分支有： master 和 develop   master 为可发布版本，每次发布会打上Tag。  develop为开发分支，只有一个小组在develop上开发，需求正常迭代，所以基本能满足要求。 （多项目组多版本同时开发正常会在develop下拉取多个 功能分支：feature-功能1、 feature-功能2 完成后再合并到develop）   由于">
@@ -346,7 +346,7 @@
                 
               
 
-              <time title="创建时间：2018-11-27 18:00:45 / 修改时间：19:21:29" itemprop="dateCreated datePublished" datetime="2018-11-27T18:00:45+08:00">2018-11-27</time>
+              <time title="创建时间：2018-11-27 18:00:45 / 修改时间：19:28:18" itemprop="dateCreated datePublished" datetime="2018-11-27T18:00:45+08:00">2018-11-27</time>
             
 
             
@@ -404,6 +404,8 @@
 </blockquote>
 <p>使用:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -m develop feature-xxx</span><br></pre></td></tr></table></figure>
+<p>将当前develop 分支修改为feature-xxx，并推送到远端，删除远端develop分支，从master 重新拉取新的分支 命名为 develop。 开发人员删除本地 develop，重新checkout 远端 develop 分支。</p>
+<p>这样 feature-xxx 被我们暂时丢一边，等重新启动时，可以在该分支上开发，完成后合并到develop，测试通过最终合并到master ，上线发布。</p>
 
       
     </div>
