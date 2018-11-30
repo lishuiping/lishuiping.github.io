@@ -301,6 +301,543 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lishuiping.github.io/2018/11/30/hive/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mark LI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mark blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/30/hive/" class="post-title-link" itemprop="https://lishuiping.github.io/index.html">hive 基本操作</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-30 10:52:02 / 修改时间：14:13:12" itemprop="dateCreated datePublished" datetime="2018-11-30T10:52:02+08:00">2018-11-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>###配置</p>
+<p>修改hive配置文件 , 我的配置文件位置在 /usr/local/Cellar/hive/2.3.1/libexec/conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/Cellar/hive/3.1.1/libexec/conf</span><br><span class="line">$ cp hive-default.xml.template hive-site.xml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim hive-site.xml</span><br></pre></td></tr></table></figure>
+<p>文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;jdbc:mysql://localhost/metastore&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hive(mysql中创建的用户名)&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;123456(mysql中创建的用户密码)&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.exec.local.scratchdir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/tmp/hive&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.querylog.location&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/tmp/hive&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.downloaded.resources.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/tmp/hive&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.server2.logging.operation.log.location&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/tmp/hive&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p> javax.jdo.option.ConnectionUserName – 连接mysql的账号<br> javax.jdo.option.ConnectionPassword – 连接mysql的秘密<br> javax.jdo.option.ConnectionURL – 对应上一步创建的数据库</p>
+<p>启动会抛找不到Driver</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -L <span class="string">'http://www.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.42.tar.gz/from/http://mysql.he.net/'</span> | tar xz</span><br><span class="line">$ cp mysql-connector-java-5.1.42/mysql-connector-java-5.1.42-bin.jar /usr/<span class="built_in">local</span>/Cellar/hive/2.1.1/libexec/lib/</span><br></pre></td></tr></table></figure>
+<p>hive 初始化 mysql 中的数据库hive</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$HIVE_HOME/bin/schematool -dbType mysql -initSchema</span><br></pre></td></tr></table></figure>
+<p>创建表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">test</span> (<span class="keyword">id</span> <span class="built_in">int</span>, <span class="keyword">name</span> <span class="keyword">string</span>,age <span class="built_in">int</span>, tel <span class="keyword">string</span>) <span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span> <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span> <span class="keyword">STORED</span> <span class="keyword">AS</span> TEXTFILE;</span><br></pre></td></tr></table></figure>
+<p>数据导入</p>
+<p>本地导入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data <span class="built_in">local</span> inpath <span class="string">'file_path'</span> into table tbname;</span><br></pre></td></tr></table></figure>
+<p>hdfs上导入数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load data inpath 'hafd_file_path' into table tbname;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lishuiping.github.io/2018/11/30/hbase/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mark LI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mark blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/30/hbase/" class="post-title-link" itemprop="https://lishuiping.github.io/index.html">hbase 基本操作</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-30 09:44:30 / 修改时间：10:24:03" itemprop="dateCreated datePublished" datetime="2018-11-30T09:44:30+08:00">2018-11-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./start-hbase.sh</span><br></pre></td></tr></table></figure>
+<h3 id="停止"><a href="#停止" class="headerlink" title="停止"></a>停止</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh</span><br></pre></td></tr></table></figure>
+<h3 id="进入命令行"><a href="#进入命令行" class="headerlink" title="进入命令行"></a>进入命令行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><p>语法：create <table>, {NAME =&gt; <family>, VERSIONS =&gt; <versions>}<br> 例如：创建表t1，有两个family name：f1，f2，且版本数前者为1，后者为2</versions></family></table></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create <span class="string">'t1'</span>,&#123;NAME =&gt; <span class="string">'f1'</span>, VERSIONS =&gt; 1&#125;,&#123;NAME =&gt; <span class="string">'f2'</span>, VERSIONS =&gt; 2&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查看所有表"><a href="#查看所有表" class="headerlink" title="查看所有表"></a>查看所有表</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):006:0&gt; list</span><br><span class="line">TABLE</span><br><span class="line">t1</span><br></pre></td></tr></table></figure>
+<h3 id="查看表结构"><a href="#查看表结构" class="headerlink" title="查看表结构"></a>查看表结构</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):008:0&gt; desc <span class="string">'t1'</span></span><br><span class="line">Table t1 is ENABLED</span><br><span class="line">t1</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; <span class="string">'f1'</span>, BLOOMFILTER =&gt; <span class="string">'ROW'</span>, VERSIONS =&gt; <span class="string">'3'</span>, IN_MEMORY =&gt; <span class="string">'false'</span>, KEEP_DELETED_CELLS =&gt; <span class="string">'FALSE'</span>, DATA_BLOCK_ENCODING =&gt; <span class="string">'NONE'</span>, TTL =&gt; <span class="string">'FOREVER'</span>, COMPRESSION =&gt; <span class="string">'NONE'</span>, MI</span><br><span class="line">N_VERSIONS =&gt; <span class="string">'0'</span>, BLOCKCACHE =&gt; <span class="string">'true'</span>, BLOCKSIZE =&gt; <span class="string">'65536'</span>, REPLICATION_SCOPE =&gt; <span class="string">'0'</span>&#125;</span><br><span class="line">&#123;NAME =&gt; <span class="string">'f2'</span>, BLOOMFILTER =&gt; <span class="string">'ROW'</span>, VERSIONS =&gt; <span class="string">'1'</span>, IN_MEMORY =&gt; <span class="string">'false'</span>, KEEP_DELETED_CELLS =&gt; <span class="string">'FALSE'</span>, DATA_BLOCK_ENCODING =&gt; <span class="string">'NONE'</span>, TTL =&gt; <span class="string">'FOREVER'</span>, COMPRESSION =&gt; <span class="string">'NONE'</span>, MI</span><br><span class="line">N_VERSIONS =&gt; <span class="string">'0'</span>, BLOCKCACHE =&gt; <span class="string">'true'</span>, BLOCKSIZE =&gt; <span class="string">'65536'</span>, REPLICATION_SCOPE =&gt; <span class="string">'0'</span>&#125;</span><br><span class="line">2 row(s) <span class="keyword">in</span> 0.0710 seconds</span><br></pre></td></tr></table></figure>
+<h3 id="查询表数据量"><a href="#查询表数据量" class="headerlink" title="查询表数据量"></a>查询表数据量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):007:0&gt; count <span class="string">'t1'</span></span><br><span class="line">0 row(s) <span class="keyword">in</span> 0.0350 seconds</span><br><span class="line"></span><br><span class="line">=&gt; 0</span><br></pre></td></tr></table></figure>
+<p>###删除表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">disable</span> <span class="string">'t1'</span></span><br><span class="line">or</span><br><span class="line">drop <span class="string">'t1'</span></span><br></pre></td></tr></table></figure>
+<p>###清空表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truncate <span class="string">'t1'</span></span><br></pre></td></tr></table></figure>
+<h3 id="插入表数据"><a href="#插入表数据" class="headerlink" title="插入表数据"></a>插入表数据</h3><p>语法：put ’<table name="">’,’row1’,’<a href="colfamily:colname" target="_blank" rel="noopener">colfamily:colname</a>’,’<value>’</value></table></p>
+<blockquote>
+<p>hbase(main):002:0&gt; put ‘t1’,’row0001’,’f1:name’,’d’;<br>0 row(s) in 0.0030 seconds</p>
+<p>hbase(main):004:0&gt; count ‘t1’<br>1 row(s) in 0.0260 seconds</p>
+<p>=&gt; 1</p>
+<p>hbase(main):005:0&gt; scan ‘t1’<br>ROW                                            COLUMN+CELL<br>row0001                                       column=f1:name, timestamp=1543543865388, value=d<br>1 row(s) in 0.0190 seconds</p>
+</blockquote>
+<blockquote>
+<p>hbase(main):006:0&gt; put ‘t1’,’row0001’,’f1:age’,’15’<br>0 row(s) in 0.0330 seconds</p>
+</blockquote>
+<blockquote>
+<p>hbase(main):007:0&gt; count ‘t1’<br>1 row(s) in 0.0100 seconds</p>
+<p>=&gt; 1</p>
+<p>hbase(main):008:0&gt; scan ‘t1’<br>ROW                                            COLUMN+CELL<br>row0001                                       column=f1:age, timestamp=1543543961278, value=15<br>row0001                                       column=f1:name, timestamp=1543543865388, value=d<br>1 row(s) in 0.0260 seconds</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lishuiping.github.io/2018/11/29/hadoop-hive-hbase/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mark LI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mark blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/29/hadoop-hive-hbase/" class="post-title-link" itemprop="https://lishuiping.github.io/index.html">hadoop hive hbase 安装说明</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-29 11:45:58" itemprop="dateCreated datePublished" datetime="2018-11-29T11:45:58+08:00">2018-11-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-30 10:29:42" itemprop="dateModified" datetime="2018-11-30T10:29:42+08:00">2018-11-30</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h3><p>​        Hadoop是使用Java编写，允许分布在集群，使用简单的编程模型的计算机大型数据集处理的Apache的开源框架。 Hadoop框架应用工程提供跨计算机集群的分布式存储和计算的环境。 Hadoop是专为从单一服务器到上千台机器扩展，每个机器都可以提供本地计算和存储。</p>
+<p>mac 安装方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install hadoop</span><br></pre></td></tr></table></figure>
+<p>可能会出现连接不上的情况，失败后重复执行即可。</p>
+<h3 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h3><p>####hive是什么</p>
+<p>1、Hive 由 Facebook 实现并开源</p>
+<p>2、是基于 Hadoop 的一个数据仓库工具</p>
+<p>3、可以将结构化的数据映射为一张数据库表</p>
+<p>4、并提供 HQL(Hive SQL)查询功能</p>
+<p>5、底层数据是存储在 HDFS 上</p>
+<p>6、Hive的本质是将 SQL 语句转换为 MapReduce 任务运行</p>
+<p>7、使不熟悉 MapReduce 的用户很方便地利用 HQL 处理和计算 HDFS 上的结构化的数据，适用于离线的批量数据计算。</p>
+<p>Hive 依赖于 HDFS 存储数据，Hive 将 HQL 转换成 MapReduce 执行，所以说 Hive 是基于 Hadoop 的一个数据仓库工具，实质就是一款基于 HDFS 的 MapReduce 计算框架，对存储在 HDFS 中的数据进行分析和管理</p>
+<p>直接使用 MapReduce 所面临的问题：</p>
+<p>　　1、人员学习成本太高</p>
+<p>　　2、项目周期要求太短</p>
+<p>　　3、MapReduce实现复杂查询逻辑开发难度太大</p>
+<p>为什么要使用 Hive：</p>
+<p>　　1、更友好的接口：操作接口采用类 SQL 的语法，提供快速开发的能力</p>
+<p>　　2、更低的学习成本：避免了写 MapReduce，减少开发人员的学习成本</p>
+<p>　　3、更好的扩展性：可自由扩展集群规模而无需重启服务，还支持用户自定义函数</p>
+<p>mac 安装方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install hive</span><br></pre></td></tr></table></figure>
+<h3 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h3><p>HBASE是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBASE技术可在廉价PC Server上搭建起大规模结构化存储集群。</p>
+<p>HBASE的目标是存储并处理大型的数据，更具体来说是仅需使用普通的硬件配置，就能够处理由成千上万的行和列所组成的大型数据。</p>
+<p>hbase适合大数据的实时查询<br>  是一个数据库系统，面向列的数据库查询，有自己的查询       语句<br>  支持横向扩展，减少成本<br>  由自己的查询方式，不用依赖于MAPREDUCE<br>  索引访问使用（HBASE+HADOOP）</p>
+<p>mac 安装方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install Hbase</span><br></pre></td></tr></table></figure>
+<h4 id="Hive-和-Hbase-的区别"><a href="#Hive-和-Hbase-的区别" class="headerlink" title="Hive 和 Hbase 的区别"></a>Hive 和 Hbase 的区别</h4><ul>
+<li><p>Hbase即 HadoopDatabase 的简称，也就是基于Hadoop数据库，是一种NoSQL数据库，适合大数据的实时查询  是一个数据库系统，面向列的数据库查询，有自己的查询 语句   支持横向扩展，减少成本 由自己的查询方式，不用依赖于MAPREDUCE 索引访问使用（HBASE+HADOOP）主要适用于海量明细数据（十亿、百亿）的随机实时查询，如交易清单、日志明细、轨迹行为等。</p>
+</li>
+<li><p>Hive是Hadoop的数据仓库，严格地讲并非数据库，主要是让开发人员能够通过SQL来计算和处理HDFS上的结构化数据，Hive会将SQL翻译为MapReduce来处理数据 ， hive适合用于网络日志等数据量大的静态数据查询   HIVE是hadoop的数据仓库，依赖于HDFS和mapreduce   类似于SQL操作   把MAPREDUCE的程序作为插件来支持HIVE的数据分析   作用于全表扫描使用（HIVE+HADOOP）   hive的操作是基于整个数据表的、   所以查询起来常常是以小时来计   不支持常规的更新语句，插入，更新，删除</p>
+</li>
+</ul>
+<h3 id="Hive-和-Hbase-的关系"><a href="#Hive-和-Hbase-的关系" class="headerlink" title="Hive 和 Hbase 的关系"></a>Hive 和 Hbase 的关系</h3><p>在大数据架构中，Hive和HBase是协作关系：</p>
+<ul>
+<li><p>通过Hive清洗、处理和计算原始数据；</p>
+</li>
+<li><p>通过ETL工具将数据源抽取到HDFS存储；</p>
+</li>
+<li><p>HIve清洗处理后的结果，如果是面向海量数据随机查询场景的可存入Hbase；</p>
+</li>
+<li><p>数据应用从HBase查询数据。</p>
+</li>
+</ul>
+<p>启动问题</p>
+<p>问题1：22端口未连接、检查本机是否开启sshd 服务器或者是否有启动</p>
+<blockquote>
+<p> connect to host localhost port 22: Connection refused</p>
+</blockquote>
+<p>如果未启动，mac 执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/sbin/sshd</span><br></pre></td></tr></table></figure>
+<p>问题2：没有设置免密登录</p>
+<blockquote>
+<p>Permission denied (publickey,password,keyboard-interactive).</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#没有公钥请执行这句 sh-keygen -t dsa -P '' -f ~/.ssh/id_rsa.pub</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://lishuiping.github.io/2018/11/27/git-rename-md/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -346,12 +883,24 @@
                 
               
 
-              <time title="创建时间：2018-11-27 18:00:45 / 修改时间：19:28:18" itemprop="dateCreated datePublished" datetime="2018-11-27T18:00:45+08:00">2018-11-27</time>
+              <time title="创建时间：2018-11-27 18:00:45" itemprop="dateCreated datePublished" datetime="2018-11-27T18:00:45+08:00">2018-11-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-30 14:13:25" itemprop="dateModified" datetime="2018-11-30T14:13:25+08:00">2018-11-30</time>
               
             
           </span>
@@ -526,7 +1075,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-28 10:28:19" itemprop="dateModified" datetime="2018-11-28T10:28:19+08:00">2018-11-28</time>
+                <time title="修改时间：2018-11-28 17:12:52" itemprop="dateModified" datetime="2018-11-28T17:12:52+08:00">2018-11-28</time>
               
             
           </span>
@@ -561,7 +1110,7 @@
       
         
           
-            <p><img src="https://raw.githubusercontent.com/lishuiping/yosoro/master/img/2018-11-28.10.20.51-tu13263_14.jpg" width="100%" height="200px"></p>
+            <p><img src="https://raw.githubusercontent.com/lishuiping/yosoro/master/img/2018-11-28.10.20.51-tu13263_14.jpg" width="100%" height="200"></p>
 <p>做这行一直没有写作的习惯，非常惭愧。</p>
 <p>搭建这个博客，只是将工作，生活中碰到的问题记录，方便日后查看，也是为了培养写作兴趣。</p>
 
@@ -650,7 +1199,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
