@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上文有一篇文章说到根据 git log 统计，统计出来的是每个人的代码量，现在有另外一种场景，需要统计出，每个月的总代码数（不是个人代码量）。如果是边开发边统计可能还要，开发工具上有很多都支持，但是对历史代码统计，git log好像行不通。 Cloc是一款使用Perl语言开发的开源代码统计工具，支持多平台使用、多语言识别，能够计算指定目标文件或文件夹中的文件数（files）、空白行数（blank）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cloc 代码量统计">
+<meta property="og:url" content="https://lishuiping.github.io/2018/12/04/cloc/index.html">
+<meta property="og:site_name" content="Mark blog">
+<meta property="og:description" content="上文有一篇文章说到根据 git log 统计，统计出来的是每个人的代码量，现在有另外一种场景，需要统计出，每个月的总代码数（不是个人代码量）。如果是边开发边统计可能还要，开发工具上有很多都支持，但是对历史代码统计，git log好像行不通。 Cloc是一款使用Perl语言开发的开源代码统计工具，支持多平台使用、多语言识别，能够计算指定目标文件或文件夹中的文件数（files）、空白行数（blank）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-04T02:25:12.969Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cloc 代码量统计">
+<meta name="twitter:description" content="上文有一篇文章说到根据 git log 统计，统计出来的是每个人的代码量，现在有另外一种场景，需要统计出，每个月的总代码数（不是个人代码量）。如果是边开发边统计可能还要，开发工具上有很多都支持，但是对历史代码统计，git log好像行不通。 Cloc是一款使用Perl语言开发的开源代码统计工具，支持多平台使用、多语言识别，能够计算指定目标文件或文件夹中的文件数（files）、空白行数（blank）">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Mark blog" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://lishuiping.github.io/2018/12/04/cloc/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>cloc 代码量统计 | Mark blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mark blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">代码如诗</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lishuiping.github.io/2018/12/04/cloc/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mark LI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mark blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">cloc 代码量统计
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-04 09:41:07 / 修改时间：10:25:12" itemprop="dateCreated datePublished" datetime="2018-12-04T09:41:07+08:00">2018-12-04</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上文有一篇文章说到根据 git log 统计，统计出来的是每个人的代码量，现在有另外一种场景，需要统计出，每个月的总代码数（不是个人代码量）。如果是边开发边统计可能还要，开发工具上有很多都支持，但是对历史代码统计，git log好像行不通。</p>
+<p>Cloc是一款使用Perl语言开发的开源代码统计工具，支持多平台使用、多语言识别，能够计算指定目标文件或文件夹中的文件数（files）、空白行数（blank）、注释行数（comment）和代码行数（code）。</p>
+<p><strong>特点</strong></p>
+<p>Cloc具备很多特性以致于让它更方便于使用、完善、拓展和便携。<br>1、作为一个单一的独立形式存在的文件，Cloc只需要下载相应文件并运行这样最少的安装工作即可。<br>2、能够从源码文件中识别编程语言注释定义；<br>3、允许通过语言和项目来分开统计计算；<br>4、能够以纯文本、SQL、XML、YAML、逗号分隔等多样化的格式生成统计结果；<br>5、能够统计诸如tar、Zip等格式的压缩文件中的代码数；<br>6、有许多排除式的指令；<br>7、能够使用空格或者不常用的字符处理文件名和目录名；<br>8、不需要依赖外部标准的Perl语言配置；<br>9、支持多平台使用。</p>
+<p><strong>安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cloc                    <span class="comment"># https://www.npmjs.com/package/cloc</span></span><br><span class="line">sudo apt-get install cloc              <span class="comment"># Debian, Ubuntu</span></span><br><span class="line">sudo yum install cloc                  <span class="comment"># Red Hat, Fedora</span></span><br><span class="line">sudo pacman -S cloc                    <span class="comment"># Arch</span></span><br><span class="line">sudo pkg install cloc                  <span class="comment"># FreeBSD</span></span><br><span class="line">sudo port install cloc  or  brew install cloc 	    <span class="comment"># Mac OS X with MacPorts</span></span><br></pre></td></tr></table></figure>
+<p><strong>实例</strong></p>
+<p>第一步： 在git 上，在每个月底代码处 找到commit id拉取分支，将分支名称命名为 月份</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b 1 973ec7dca5b51bd93e63c0a9d3b7a05db341caa7</span><br><span class="line">..</span><br><span class="line">..</span><br><span class="line">..</span><br><span class="line">git checkout -b 12 commit id</span><br></pre></td></tr></table></figure>
+<p>第二步： 分别切换到每个月的分支，使用cloc统计代码量。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">git checkout </span><br><span class="line">cloc project_demo</span><br><span class="line"></span><br><span class="line">cloc yht</span><br><span class="line">     538 text files.</span><br><span class="line">     523 unique files.                                          </span><br><span class="line">     387 files ignored.</span><br><span class="line"></span><br><span class="line">github.com/AlDanial/cloc v 1.70  T=1.92 s (78.5 files/s, 62020.1 lines/s)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">Language                     files          blank        comment           code</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">JavaScript                     123           3738           2589          80813</span><br><span class="line">JSON                             4              0              0          22129</span><br><span class="line">SASS                            11             80            169           5713</span><br><span class="line">CSS                              8            433             43           3088</span><br><span class="line">HTML                             2             50             21            326</span><br><span class="line">Markdown                         1             13              0             65</span><br><span class="line">YAML                             1              0              0              5</span><br><span class="line">Bourne Shell                     1              0              1              5</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">SUM:                           151           4314           2823         112144</span><br><span class="line">-------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>通过上面的方式，功能是能实现，但是非常耗时，不知道哪个大神说过：浪费时间，就是浪费生命。。。干我们这行，生命很短暂，所以为了小命，我们需要继续优化。</p>
+<p>​    第一步，在每个月月末拉取分支这个没什么优化，暂时没有好的办法，需要人为的去判断取出commit id，当日，还有一种办法，通过git log提交的时间，取出每个月最后一条记录。不过花这个时间，我还不如一条条去找。</p>
+<p>​       第二步，切换分支，使用cloc 统计，我们知道，分支名称是通过月份来命名的，是有规律递增。</p>
+<p>改进：vi total.sh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>((i=1;i&lt;=12;i++));  <span class="comment">#循环12个分支</span></span><br><span class="line"><span class="keyword">do</span>   </span><br><span class="line">git checkout <span class="variable">$i</span>  <span class="comment">#切换分支</span></span><br><span class="line">cloc ./			<span class="comment">#统计</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>ok，这样我们省去了手动切换分支统计的时间。</p>
+<p><strong>发现问题</strong></p>
+<p>前端统计的时候，有些vue 结尾的 代码量好像没计算在内，查找原因发现：cloc  的JavaScript只包含了统计 es6 和js后缀。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cloc --show-lang=JavaScript</span><br><span class="line">JavaScript                 (es6, js)</span><br></pre></td></tr></table></figure>
+<p>继续改进： cloc 支持这种语言，通过 –force-lang</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>((i=1;i&lt;=12;i++));  </span><br><span class="line"><span class="keyword">do</span>   </span><br><span class="line">git checkout <span class="variable">$i</span></span><br><span class="line">cloc --force-lang=JavaScript,vue ./</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>这样，我们就讲vue 后缀的文件代码量统计到JavaScript 中。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/30/hive/" rel="next" title="hive 基本操作">
+                <i class="fa fa-chevron-left"></i> hive 基本操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/04/git-log-statistics/" rel="prev" title="根据作者，统计出每个人代码量">
+                根据作者，统计出每个人代码量 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Mark LI">
+            
+              <p class="site-author-name" itemprop="name">Mark LI</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/lishuiping" title="GitHub &rarr; https://github.com/lishuiping" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mark LI</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

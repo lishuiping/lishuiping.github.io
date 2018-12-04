@@ -115,12 +115,14 @@
 <meta property="og:site_name" content="Mark blog">
 <meta property="og:description" content="Hadoop​        Hadoop是使用Java编写，允许分布在集群，使用简单的编程模型的计算机大型数据集处理的Apache的开源框架。 Hadoop框架应用工程提供跨计算机集群的分布式存储和计算的环境。 Hadoop是专为从单一服务器到上千台机器扩展，每个机器都可以提供本地计算和存储。 mac 安装方法： 1brew install hadoop 可能会出现连接不上的情况，失败后重复执行">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-30T02:29:42.076Z">
+<meta property="og:updated_time" content="2018-12-04T06:26:02.368Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hadoop hive hbase 安装说明">
 <meta name="twitter:description" content="Hadoop​        Hadoop是使用Java编写，允许分布在集群，使用简单的编程模型的计算机大型数据集处理的Apache的开源框架。 Hadoop框架应用工程提供跨计算机集群的分布式存储和计算的环境。 Hadoop是专为从单一服务器到上千台机器扩展，每个机器都可以提供本地计算和存储。 mac 安装方法： 1brew install hadoop 可能会出现连接不上的情况，失败后重复执行">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="Mark blog" type="application/atom+xml">
 
 
 
@@ -363,7 +365,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-30 10:29:42" itemprop="dateModified" datetime="2018-11-30T10:29:42+08:00">2018-11-30</time>
+                <time title="修改时间：2018-12-04 14:26:02" itemprop="dateModified" datetime="2018-12-04T14:26:02+08:00">2018-12-04</time>
               
             
           </span>
@@ -400,6 +402,73 @@
 <p>mac 安装方法：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install hadoop</span><br></pre></td></tr></table></figure>
 <p>可能会出现连接不上的情况，失败后重复执行即可。</p>
+<p>Hadoop 3 端口号的改变</p>
+<table>
+<thead>
+<tr>
+<th>Daemon</th>
+<th>App</th>
+<th>Hadoop2 Port</th>
+<th>Hadoop3 Port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NameNode Port</td>
+<td>Hadoop HDFS NameNode</td>
+<td>8020</td>
+<td>9820</td>
+</tr>
+<tr>
+<td></td>
+<td>Hadoop HDFS NameNode HTTP UI</td>
+<td>50070</td>
+<td>9870</td>
+</tr>
+<tr>
+<td></td>
+<td>Hadoop HDFS NameNode HTTPS UI</td>
+<td>50470</td>
+<td>9871</td>
+</tr>
+<tr>
+<td>Secondary NameNode Port</td>
+<td>Secondary NameNode HTTP</td>
+<td>50091</td>
+<td>9869</td>
+</tr>
+<tr>
+<td></td>
+<td>Secondary NameNode HTTP UI</td>
+<td>50090</td>
+<td>9868</td>
+</tr>
+<tr>
+<td>DataNode Port</td>
+<td>Hadoop HDFS DataNode IPC</td>
+<td>50020</td>
+<td>9867</td>
+</tr>
+<tr>
+<td></td>
+<td>Hadoop HDFS DataNode</td>
+<td>50010</td>
+<td>9866</td>
+</tr>
+<tr>
+<td></td>
+<td>Hadoop HDFS DataNode HTTP UI</td>
+<td>50075</td>
+<td>9864</td>
+</tr>
+<tr>
+<td></td>
+<td>Hadoop HDFS DataNode HTTPS UI</td>
+<td>50475</td>
+<td>9865</td>
+</tr>
+</tbody>
+</table>
 <h3 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h3><p>####hive是什么</p>
 <p>1、Hive 由 Facebook 实现并开源</p>
 <p>2、是基于 Hadoop 的一个数据仓库工具</p>
@@ -567,7 +636,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -579,6 +648,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
